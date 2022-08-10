@@ -27,8 +27,8 @@ class UserController extends Controller
     {
         $userId = Auth::user()->id;
         $user= User::with('products')->where('id', $userId)->first();
-        // $products = Product::where('user_id', $userId)->get();
-        // $user->products = $products;
+        $products = Product::where('user_id', $userId)->get();
+        $user->products = $products;
         return response()->json(['user' => $user], 200);
     }
 

@@ -55,4 +55,22 @@ class AuthController extends Controller{
         // Log::info($token);
         return $this->respondWithToken($token);
     }
+
+    protected function authenticated()
+    {
+        if(Auth::user()->role_as == '1') //1 = Admin Login
+        {
+            return redirect('api/v1/category')->with('status','Welcome to your category');
+        }
+        elseif(Auth::user()->role_as == '0') // Normal or Default User Login
+        {
+            return redirect('/')->with('status','Logged in successfully');
+        }
+    }
+
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
 }

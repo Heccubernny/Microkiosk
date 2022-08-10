@@ -48,6 +48,16 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
+
+$app->configure('cors');
+
+$app->middleware([
+    // ...
+    Fruitcake\Cors\HandleCors::class,
+]);
+
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Register Config Files

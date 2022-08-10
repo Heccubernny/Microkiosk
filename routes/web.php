@@ -1,5 +1,11 @@
 <?php
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\AuthController;
+
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -26,6 +32,10 @@ $router->group(['prefix' => 'api/v1/',],  function()use ($router){
             $router->post('/login', 'AuthController@login');
         });
 
+        $router->group(['prefix' => 'category'], function() use ($router){
+            $router->get('/', 'CategoryController@index');
+        });
+
         $router->group(['prefix' => 'user'], function() use ($router){
             $router->get('/profile', 'UserController@profile');
 
@@ -36,6 +46,17 @@ $router->group(['prefix' => 'api/v1/',],  function()use ($router){
                 $router->put('/{id}', 'ProductController@update');
                 $router->delete('/{id}', 'ProductController@destroy');
             });
+
+            $router->group(['prefix' => 'cart'], function() use($router){
+                $router->get('/view', 'CartController@index');
+                $router->get('/add', 'CartController@add');
+                $router->get('/clear', 'CartController@clear');
+                $router->post('/update', 'CartController@update');
+                $router->post('/remove', 'CartController@remove');
+
+            });
         });
+
+
 
     });

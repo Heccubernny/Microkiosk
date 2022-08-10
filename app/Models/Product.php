@@ -6,9 +6,22 @@ class Product extends Model{
     protected $table = 'products';
 
     protected $fillable = [
+        'category_id',
         'name',
+        'vendor_id',
+        'original_price',
+        'selling_price',
+        'slug',
+        'image_path',
+        'quantity',
         'description',
-        'price'
+        'delivery_cost',
+        'tax',
+        'status',
+        'trending',
+        'meta_title',
+        'meta_keywords',
+        'meta_description',
     ];
 
 

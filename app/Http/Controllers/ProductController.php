@@ -8,7 +8,7 @@ class ProductController extends Controller{
     protected $limit = 10;
 
     public function index(){
-        $userId = Auth::user()->id;
+        $userId = Auth::user();
         $products = Product::where('user_id', $userId)->paginate($this->limit);
         return response()->json([
             'status' => 'success',
@@ -20,9 +20,13 @@ class ProductController extends Controller{
                 'last_page' => $products->lastPage(),
                 'from' => $products->firstItem(),
                 'to' => $products->lastItem(),
-
                 ]
         ], 200);
+
+        echo '<pre>';
+            var_dump($userId);
+        echo '</pre>';
+        exit;
     }
 
     public function store(Request $request)
@@ -51,16 +55,9 @@ class ProductController extends Controller{
     public function show($id){
         $product = Product::with('user')->where('id', $id)->first();
         if(!$product){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Product not found',
-            ], 404);
+            return $this->dataResponse('error', 'Product not found');
         }
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $product
-        ], 200);
+        return $this->dataResponse('success',$product, 200);
     }
 
     public function update(Request $request, $id){
@@ -70,11 +67,9 @@ class ProductController extends Controller{
             'description' => 'required',
         ]);
         $product = Product::find($id);
+        $message = 'Product '.$product->name.' updated successfully';
         if(!$product){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Product not found',
-            ], 404);
+            return $this->dataResponse('error', 'Product not found');
         }
 
         $product = new Product();
@@ -82,27 +77,19 @@ class ProductController extends Controller{
         $product->price = $request->input('price');
         $product->description = $request->input('description');
 
-        $product-> save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => `Product ${$product->name} updated successfully`,
-        ], 200);
+        $product->save();
+        return $this->dataResponse('success', $message, $product);
     }
 
     public function destroy($id){
 
         $product = Product::find($id);
+        $message = 'Product deleted successfully';
+
         if(!$product){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Product not found',
-            ], 404);
+            return $this->dataResponse('error', 'Product not found');
         }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Product deleted successfully'
-        ], 200);
+        return $this->dataResponse('success', $message);
     }
 }

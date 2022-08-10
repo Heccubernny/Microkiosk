@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 
 class Controller extends BaseController
 {
     //
     public function dataResponse($status, $message, $data = null){
         $code = $status == 'success' ? 200 : 201;
+
         return response()->json([
             'status' => $status,
             'data' => $data,
